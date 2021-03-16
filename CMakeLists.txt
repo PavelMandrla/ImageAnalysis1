@@ -8,12 +8,12 @@ add_subdirectory(IALib)
 
 find_package( OpenCV REQUIRED )
 
-add_executable(dzo
+add_executable(IA
         Exercise5.cpp
         #main.cpp
         )
 
-target_link_libraries( dzo
+target_link_libraries( IA
         ${OpenCV_LIBS}
         backprop
         IA_LIB

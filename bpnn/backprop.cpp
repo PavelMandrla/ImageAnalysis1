@@ -11,15 +11,13 @@
 
 #define SQR( x ) ( ( x ) * ( x ) )
 
-void randomize( double * p, int n ) 
-{
+void randomize( double * p, int n ) {
 	for ( int i = 0; i < n; i++ ) {
 		p[i] = ( double )rand() / ( RAND_MAX );
 	}
 }
 
-NN * createNN( int n, int h, int o ) 
-{
+NN * createNN( int n, int h, int o ) {
 	srand(time(NULL));
 	NN * nn = new NN;
 	
@@ -30,12 +28,10 @@ NN * createNN( int n, int h, int o )
 	nn->l = 3;
 
 	nn->w = new double ** [nn->l - 1];
-    
 
-	for ( int k = 0; k < nn->l - 1; k++ ) 
-    {
+	for ( int k = 0; k < nn->l - 1; k++ ) {
 		nn->w[k] = new double * [nn->n[k + 1]];
-		for ( int j = 0; j < nn->n[k + 1]; j++ ) 
+		for ( int j = 0; j < nn->n[k + 1]; j++ )
         {
 			nn->w[k][j] = new double[nn->n[k]];			
 			randomize( nn->w[k][j], nn->n[k]);
@@ -63,8 +59,7 @@ NN * createNN( int n, int h, int o )
 	return nn;
 }
 
-void releaseNN( NN *& nn ) 
-{
+void releaseNN( NN *& nn ) {
 	for ( int k = 0; k < nn->l - 1; k++ ) {
 		for ( int j = 0; j < nn->n[k + 1]; j++ ) {
 			delete [] nn->w[k][j];
@@ -80,12 +75,9 @@ void releaseNN( NN *& nn )
 	
 	for ( int k = 0; k < nn->l; k++ ) {
 		delete [] nn->d[k];
-		
 	}
 	delete [] nn->d;
-
 	delete [] nn->n;
-
 	delete nn;
 	nn = NULL;
 }
