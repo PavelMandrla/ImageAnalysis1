@@ -123,27 +123,29 @@ double d_hidden(int k, int i, NN * nn) {
 }
 
 double d_w(int k, int i, int j, NN * nn) {
-    return ETA * nn->d[k][i] * nn->y[k-1][i];
+    return ETA * nn->d[k+1][i] * nn->y[k][j];
 }
 
 double backpropagation( NN * nn, double * t ) {
-    for (int i = 0; i < nn->n[2]; i++) {
-        nn->d[2][i] = d_output(2, i, t, nn);
+    const int oli = nn->l - 1;
+    for (int i = 0; i < nn->n[oli]; i++) {
+        nn->d[oli][i] = d_output(oli, i, t, nn);
     }
 
-    for (int k = 1; k < nn->l - 1; k++) {               // ITERATE THROUGH LAYERS //TODO -> k =1? 0? who knows????
-        for (int i = 0; i < nn->n[k]; i++) {        // ITERATE NEURONS IN LAYER
+    for (int k = nn->l-2; k > 0; k--) {
+        for (int i = 0; i < nn->n[k]; i++) {
             nn->d[k][i] = d_hidden(k, i, nn);
         }
     }
 
-    for (int k = 1; k < 3; k++) {
-        for (int i = 0; i < nn->n[k]; i++) {
-            for (int j = 0; j < nn->n[k-1]; j++) {
-                nn->w[k-1][i][j] += d_w(k, i, j, nn);
+    for (int k = 0; k < nn->l - 1; k++) {
+        for (int i = 0; i < nn->n[k + 1]; i++) {
+            for (int j = 0; j < nn->n[k]; j++) {
+                nn->w[k][i][j] += d_w(k, i, j, nn);
             }
         }
     }
+
 	return E(nn, t);
 }
 

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.0.0)
-project(dzo VERSION 0.1.0)
+project(ImageAnalysis1 VERSION 0.1.0)
 
 add_library(backprop bpnn/backprop.cpp)
 target_include_directories(backprop PUBLIC bpnn)
