@@ -6,6 +6,8 @@
 #include <cmath>
 #include <random>
 #include <string>
+#include <memory>
+#include <vector>
 
 void doThresholding(int threshold, cv::Mat &image) {
     for (int y = 0; y < image.rows; y++) {
@@ -51,6 +53,19 @@ void indexObjects(cv::Mat &img, cv::Mat &indexed, int &objectCount) {
     objectCount;
 }
 
+std::vector<cv::Vec3i> generateColors(int colorCount) {
+    std::vector<cv::Vec3i> result(colorCount);
+
+    std::random_device rd;  //Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); //Standard mersenne_twister_engine seeded with rd()
+    std::uniform_int_distribution<> distrib(40, 255);
+
+    for (auto & i : result) {
+        i = cv::Vec3i { distrib(gen), distrib(gen), distrib(gen) };
+    }
+    return result;
+}
+
 cv::Mat colorObjects(cv::Mat indexed, int objCount, bool showIndices) {
     auto *colors = new cv::Vec3i[objCount];
 
@@ -89,6 +104,37 @@ cv::Mat colorObjects(cv::Mat indexed, int objCount, bool showIndices) {
 
     delete[] colors;
     return colored;
+}
+
+cv::Mat colorObjects(cv::Mat indexed, int objectCount, int classCount, map<int, int> classes, bool showIndices) {
+    cv::Mat result = cv::Mat::zeros(indexed.size(), CV_8SC3);
+    auto colors = generateColors(classCount);
+
+    for (int y = 0; y < result.rows; y++) {
+        for (int x = 0; x < result.cols; x++) {
+            if (indexed.at<int>(y, x) != -1) {
+                auto colorI = classes[indexed.at<int>(y, x)];
+                result.at<cv::Vec3b>(y, x) = colors[colorI];
+            }
+        }
+    }
+
+    if (showIndices) {
+        for (int i = 0; i < objectCount; i++) {
+            Coordinate<int> center = getCenterOfMass(i, indexed);
+            cv::putText(
+                    result,
+                    std::to_string(i),
+                    cv::Point(center.x, center.y),
+                    cv::FONT_HERSHEY_DUPLEX,
+                    0.5,
+                    cv::Scalar(0,255,0),
+                    2,
+                    false);
+        }
+    }
+
+    return result;
 }
 
 int getIndexAt(int y, int x, cv::Mat objects) {
@@ -174,3 +220,5 @@ std::vector<Coordinate<float>> calculateFeatures(int objectCount, cv::Mat &index
     }
     return result;
 }
+
+

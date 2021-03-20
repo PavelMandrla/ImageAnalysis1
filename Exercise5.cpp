@@ -21,7 +21,6 @@ cl cl_box {0, "box", std::vector<int>{0,1,2,3} };
 cl cl_star {1, "star", std::vector<int>{4,5,6,7} };
 cl cl_rect {2, "rect", std::vector<int>{8,9,10,11} };
 
-
 void train(NN * nn) {
     cv::Mat input = cv::imread( "../images/segmentation_input.png", cv::IMREAD_GRAYSCALE );
     doThresholding(128,input);
@@ -80,15 +79,29 @@ void test(NN * nn) {
     indexObjects(detectInput, indexed, objectCount);
 
     auto objects = calculateFeatures(objectCount, indexed);
+
+    std::map<int, int> objectClass;
+
+    auto* in = new double[nn->n[0]];
+    for (int i = 0; i < objects.size(); i++) {
+        in[0] = objects[i].x;
+        in[1] = objects[i].y;
+
+        setInput(nn, in, false);
+        feedforward(nn);
+        int output = getOutput(nn, false);
+        objectClass.insert(pair<int, int>(i, output));
+    }
+    auto colored = colorObjects(indexed, objectCount, 3, objectClass, false);
+    imshow("result", colored);
+    cv::waitKey(0);
 }
 
-
-
 int main(int argc, char* argv[]) {
-    NN * nn = createNN(2, 4, 3);
+    NN * nn = createNN(2, 5, 3);
     train(nn);
     getchar();
-    //test(nn);
+    test(nn);
     releaseNN(nn);
 
     return 0;

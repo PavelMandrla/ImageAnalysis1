@@ -6,6 +6,10 @@
 #define DZO_IALIB_H
 
 #include <opencv2/opencv.hpp>
+#include <map>
+#include <vector>
+
+using namespace std;
 
 template <typename T>
 struct Coordinate {
@@ -19,6 +23,8 @@ void floodFill(int y, int x, int I,cv::Mat &img, cv::Mat &indexed);
 void indexObjects(cv::Mat &img, cv::Mat &indexed, int &objectCount);
 
 cv::Mat colorObjects(cv::Mat indexed, int objCount, bool showIndices=true);
+
+cv::Mat colorObjects(cv::Mat indexed, int objectCount, int classCount, map<int, int> classes, bool showIndices=true);
 
 int getIndexAt(int y, int x, cv::Mat objects);
 
