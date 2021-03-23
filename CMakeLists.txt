@@ -10,7 +10,6 @@ find_package( OpenCV REQUIRED )
 
 add_executable(IA
         Exercise5.cpp
-        #main.cpp
         )
 
 target_link_libraries( IA

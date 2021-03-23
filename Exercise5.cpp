@@ -93,8 +93,13 @@ void test(NN * nn) {
         objectClass.insert(pair<int, int>(i, output));
     }
     auto colored = colorObjects(indexed, objectCount, 3, objectClass, false);
-    imshow("result", colored);
-    cv::waitKey(0);
+    //imshow("result", colored);
+
+    cv::Mat coloredScaled;
+    cv::resize(colored, coloredScaled, cv::Size(), 2.0f, 2.0f, cv::INTER_NEAREST);
+
+    cv::imshow("result", coloredScaled);
+    cv::waitKey( 0 );
 }
 
 int main(int argc, char* argv[]) {
