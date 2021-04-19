@@ -6,14 +6,17 @@ target_include_directories(backprop PUBLIC bpnn)
 
 add_subdirectory(IALib)
 
-find_package( OpenCV REQUIRED )
+find_package(OpenCV REQUIRED)
+find_package(OpenMP REQUIRED)
 
 add_executable(IA
-        Exercise5.cpp
-        )
+        #cviko7.cpp
+        #E8.cpp
+        Exercise8.cpp)
 
 target_link_libraries( IA
         ${OpenCV_LIBS}
         backprop
         IA_LIB
+        OpenMP::OpenMP_CXX
         )
