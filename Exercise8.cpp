@@ -15,20 +15,12 @@ void update(cv::Mat &frame, MOG_Matrix &mogMat, cv::Mat &mask) {
             float densities[K];
             float densitySum = 0.0;
 
-            int maximumIndex = 0;
-            float densityMax = FLT_MIN;
-
             for (int k = 0; k < K; k++) {
                 densities[k] = mog.gaussians[k].getWeightedPDF(X);
                 densitySum += densities[k];
-
-                if (densities[k] > densityMax) {
-                    densityMax = densities[k];
-                    maximumIndex = k;
-                }
             }
 
-            mog.updateGaussians(X, densityMax, densitySum);
+            mog.updateGaussians(X, densitySum);
 
             std::sort(mog.gaussians.begin(), mog.gaussians.end(), [](const Gaussian& g1, const Gaussian& g2) {
                 return g1.probability > g2.probability;

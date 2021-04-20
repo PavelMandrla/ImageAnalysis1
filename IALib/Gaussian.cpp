@@ -21,7 +21,7 @@ Gaussian::Gaussian(float mean, float sigma, float probability) {
     this->probability = probability;
 }
 
-void Gaussian::update(float x, float max_density, float sum) {
+void Gaussian::update(float x, float sum) {
     this->probability = (1.0f - alpha) * probability + alpha * this->getWeightedPDF(x) / sum;
     double rho = (alpha * this->getWeightedPDF(x) / sum) / probability;
     this->mean = (1 - rho) * mean + rho * x;
@@ -49,9 +49,9 @@ float MOG::getProbSum() {
     return probSum;
 }
 
-void MOG::updateGaussians(float x, float max_density, float sum) {
+void MOG::updateGaussians(float x, float sum) {
     for (int k = 0; k < K; k++) {
-        gaussians[k].update(x, max_density, sum);
+        gaussians[k].update(x, sum);
     }
     this->normalizeProbabilities();
 }

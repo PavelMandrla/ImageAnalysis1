@@ -20,7 +20,7 @@ public:
 
     float pdf(float x);
     float getWeightedPDF(float x);
-    void update(float x, float maxDensity, float densitySum);
+    void update(float x, float densitySum);
 };
 
 class MOG {
@@ -31,7 +31,7 @@ public:
     explicit MOG(int K);
 
     float getProbSum();
-    void updateGaussians(float x, float max_density, float sum);
+    void updateGaussians(float x, float sum);
     void normalizeProbabilities();
     float getVal(float x);
 };
