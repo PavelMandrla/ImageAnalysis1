@@ -27,7 +27,6 @@ std::vector<Center> placeCenters(cv::Mat &img) {
     std::vector<Center> result;
     for (int k_x = dx/2; k_x < img.cols; k_x += dx) {
         for (int k_y = dy/2; k_y < img.rows; k_y += dy) {
-            //img.at<cv::Vec3b>(k_y, k_x) = cv::Vec3b (0,0,255);
 
             Center tmp;
             tmp.x = k_x;
@@ -83,13 +82,9 @@ void moveCenters(cv::Mat &img, std::vector<Center> &centers) {
         moved = false;
         for (int i = 0; i < centers.size(); i++) {
             moved |= moveCenter(img, centers[i]);
-            //img.at<cv::Vec3b>(centers[i].y, centers[i].x) = cv::Vec3b(0,0,255);
         }
-        //cv::imshow("fml", img);
-        //cv::waitKey(10);
     }
 }
-
 
 double dRGB(cv::Mat &img, int x1, int y1, int x2, int y2) {
     cv::Vec3b c1 = img.at<cv::Vec3b>(y1, x1);
@@ -141,10 +136,6 @@ int main() {
 
     cv::imshow("result", slic(input, centers));
     cv::waitKey(0);
-
-
-
-
 
     return 0;
 }
