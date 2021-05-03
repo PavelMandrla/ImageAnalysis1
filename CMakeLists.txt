@@ -12,7 +12,7 @@ find_package(OpenMP REQUIRED)
 add_executable(IA
         #cviko7.cpp
         #E8.cpp
-        Exercise8.cpp)
+        Exercise11.cpp)
 
 target_link_libraries( IA
         ${OpenCV_LIBS}
